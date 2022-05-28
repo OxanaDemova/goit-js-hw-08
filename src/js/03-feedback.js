@@ -20,18 +20,30 @@ window.addEventListener('load', onPageLoad)
 
 
 function onFormSubmit(e) {
+
   e.preventDefault();
 
   const formDataObj = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
 
-  console.log(formDataObj);
+  const {
+        elements: { email, message }
+    } = e.currentTarget;
 
-  e.currentTarget.reset();
-  localStorage.removeItem(LOCALSTORAGE_KEY);
+  if (email.value !== '' && message.value !== '') {
+      
+    e.currentTarget.reset();
+    localStorage.removeItem(LOCALSTORAGE_KEY);
+    
+      return  console.log(formDataObj);
+  } else {
+    return alert('Please fill in all the fields!');
+    }
+
 }
 
 
 function onTextareaInput(e) {
+  const formData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) || {};
 
   const { name, value } = e.target;
 
@@ -42,14 +54,17 @@ function onTextareaInput(e) {
 }
 
 
-
 function onPageLoad() {
   try {
     const formDataObj = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
 
-    refs.input.value = formDataObj.email;
-    refs.textarea.value = formDataObj.message;
+     if (formDataObj) {
+        
+        refs.input.value = formDataObj.email || "";
+        refs.textarea.value = formDataObj.message || "";
+    }
 
+    
   } catch (error) {
     console.log(error.name);
     console.log(error.message);
